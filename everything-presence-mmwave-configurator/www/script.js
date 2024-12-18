@@ -766,12 +766,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const template = `
         {% set devices = namespace(list=[]) %}
             {% for device in states | map(attribute='entity_id') | map('device_id') | unique | reject('none') %}
-                {% set model = device_attr(device, 'model') %}
-                {% set manufacturer = device_attr(device, 'manufacturer') %}
-                {% if manufacturer == 'EverythingSmartTechnology' %}
-                    {% if model == 'Everything_Presence_Lite' or model == 'Everything Presence Lite' %}
-                        {% set devices.list = devices.list + [{'id': device, 'name': device_attr(device, 'name')}] %}
-                    {% endif %}
+                {% set name = device_attr(device, 'name') %}
+                {% set id = device %}
+                {% if name %}
+                    {% set devices.list = devices.list + [{'id': id, 'name': name}] %}
                 {% endif %}
             {% endfor %}
         {{ devices.list | tojson }}
@@ -800,6 +798,7 @@ document.addEventListener("DOMContentLoaded", () => {
       deviceSelect.appendChild(option);
     });
   }
+
 
   // ==========================
   //   === Entity Dropdown ===
